@@ -1,0 +1,85 @@
+drop table WellType;
+drop table WellStatus;
+drop table MethodType;
+drop table DefProdReason;
+drop table Well;
+drop table DailyProduction;
+
+Create table if not exists WellType(
+	TypeCode		smallint,
+	Description		varchar(50),
+	primary key (TypeCode)
+);
+	
+	
+Create table if not exists WellStatus(
+	StatusCode		smallint,
+	StatusDesc		varchar(50),
+	primary key (StatusCode)
+);
+	
+	
+Create table MethodType(
+	MethodCode		smallint,
+	MethodDesc		varchar(50),
+	primary key (MethodCode)
+);
+	
+	
+Create table DefProdReason(
+	DefProdReasonCode	smallint,
+	Reason			varchar(100),
+	primary key (DefProdReasonCode)
+);
+	
+	
+Create table Well(
+	WellZoneNum		varchar(7),
+	Field			varchar(25),
+	LeaseCode		varchar(30),
+	WellNum			varchar(20),
+	OCSLease		bit,
+	StateCompID		varchar(10),
+	CompDate		date,
+	InitProdDate		date,
+	LastProdDate		date,
+	StatusCode		smallint,
+	TypeCode		smallint,
+	MethodCode		smallint,
+	SandName		varchar(50),
+	primary key (WellZoneNum),
+	foreign key (StatusCode) references WellStatus (StatusCode),
+	foreign key (TypeCode) references WellType (TypeCode),
+	foreign key (MethodCode) references MethodType (MethodCode)
+);
+	
+	
+Create table DailyProduction(
+	WellZoneNum			varchar(7),
+	AllocDate			date,
+	StatusCode			smallint,
+	MethodCode			smallint,
+	Hours				float,
+	DefProdReasonCode		smallint,
+	OilVolProd			float,
+	WaterVolProd			float,
+	Fluid				float,
+	OilPerc				float,
+	GasVolProd			float,
+	WaterVolInj			float,
+	GasVolInj			int,
+	CO2Inj				int,
+	GasLift				float,
+	CasingPress			float,
+	OilSales			float,
+	GasSales			float,
+	primary key (WellZoneNum, AllocDate),
+	foreign key (WellZoneNum) references Well (WellZoneNum),
+	foreign key (StatusCode) references WellStatus (StatusCode),
+	foreign key (MethodCode) references MethodType (MethodCode),
+	foreign key (DefProdReasonCode) references DefProdReason (DefProdReasonCode)
+);
+	
+	
+	
+	
